@@ -64,8 +64,9 @@ public class RecipeController {
 		//return newlyBooking.getBookingId();
 	}
 	
+	//update existing recipe
 	@PutMapping("users/recipe/{id}")
-	public ResponseEntity<Recipe> updateBooking(
+	public ResponseEntity<Recipe> updateRecipe(
 			@PathVariable String id,
 			@RequestBody Recipe booking){
 		Recipe updatedRecipe = recipeService.saveRecipe(booking);

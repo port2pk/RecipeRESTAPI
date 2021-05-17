@@ -9,18 +9,29 @@ import org.springframework.stereotype.Service;
 import com.recipe.entity.Recipe;
 import com.recipe.repos.RecipeRepository;
 
-
+/**
+ * Service 
+ * @author PKumar14
+ *
+ */
 @Service
 public class RecipeService {
 	
 	@Autowired
 	RecipeRepository recipeRepos;
 	
-	
+	/**
+	 * sample logic
+	 * @return
+	 */
 	public List<Recipe> findAll(){
 		return recipeRepos.findAll();
 	}
-	
+	/**
+	 * sample logic
+	 * @param id
+	 * @return
+	 */
 	public Recipe findById(Long id) {
 		Recipe recipee =null;
 		Optional<Recipe> recipe =recipeRepos.findById(id);
@@ -33,7 +44,9 @@ public class RecipeService {
 		}
 		return recipee;
 	}
-	
+	/**
+	 * This is just a sample logic for save.
+	 */
 	public Recipe saveRecipe(Recipe recipe) {
 		Recipe persistedRecipe = null;
 		if(recipe.getRecipeId() == null) {
@@ -47,7 +60,11 @@ public class RecipeService {
 		}
 		return persistedRecipe;
 	}
-	
+	/**
+	 * sample logic.
+	 * @param recipeId
+	 * @return
+	 */
 	public boolean deleteById(Long recipeId) {
 		boolean isDeleted = false;
 		Optional<Recipe> fetchedRecipe=recipeRepos.findById(recipeId);
