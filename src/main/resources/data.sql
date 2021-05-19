@@ -1,5 +1,3 @@
-
-
 insert  into  recipe (recipe_id,recipe_cd,recipe_creation_date,recipe_modification_date,recipe_is_active,recipe_for_person) 
 VALUES(1,'CRISPY COCONUT OATMEALS',CURDATE(),CURDATE(),true,3);
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.recipe.entity.Recipe;
+import com.recipe.exception.NoEntityFoundException;
 import com.recipe.repos.RecipeRepository;
 
 /**
@@ -35,12 +36,10 @@ public class RecipeService {
 	public Recipe findById(Long id) {
 		Recipe recipee =null;
 		Optional<Recipe> recipe =recipeRepos.findById(id);
-		if(null == recipe) {
-			return null;
+		if(recipe.isPresent()) {
+			recipee = recipe.get();
 		}else {
-			if(recipe.get().getRecipeId()==id) {
-				recipee = recipe.get();
-			}
+			throw new NoEntityFoundException("No record found for id :"+id);
 		}
 		return recipee;
 	}
@@ -52,10 +51,12 @@ public class RecipeService {
 		if(recipe.getRecipeId() == null) {
 			persistedRecipe = recipeRepos.save(recipe);
 		}else {
-			//update the existing one, so first delete then add.
-			boolean isDeleted = deleteById(recipe.getRecipeId());
-			if(isDeleted){
+			//update
+			persistedRecipe =findById(recipe.getRecipeId());
+			if(null != persistedRecipe) {
 				persistedRecipe = recipeRepos.save(recipe);
+			}else {
+				throw new NoEntityFoundException("No record found for id :"+recipe.getRecipeId());
 			}
 		}
 		return persistedRecipe;
@@ -68,7 +69,7 @@ public class RecipeService {
 	public boolean deleteById(Long recipeId) {
 		boolean isDeleted = false;
 		Optional<Recipe> fetchedRecipe=recipeRepos.findById(recipeId);
-		if(null != fetchedRecipe) {
+		if(fetchedRecipe.isPresent()) {
 			recipeRepos.delete(fetchedRecipe.get());
 			isDeleted = true;
 		}

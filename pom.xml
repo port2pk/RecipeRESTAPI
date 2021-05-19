@@ -33,8 +33,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-security</artifactId> 
-			</dependency> -->
+		
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -64,12 +63,34 @@
        	 	</exclusions>
 		</dependency>
 		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		   <artifactId>spring-boot-starter-security</artifactId> 
+		</dependency>
+		<dependency> 
+			<groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-test</artifactId> 
+			<scope>test</scope> 
+		</dependency>
+		<dependency>
         	<groupId>org.junit.jupiter</groupId>
         	<artifactId>junit-jupiter-engine</artifactId>
         	<scope>test</scope>
     	</dependency>
-		<!-- <dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-test</artifactId> 
-			<scope>test</scope> </dependency> -->
+    	<!-- jwt dependency added here -->
+    	<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+		<!-- in JDK 9 due to modularity, jaxb support has been removed, so adding externally. -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<!-- jwt dependency ended here -->
+		
+		
 	</dependencies>
 
 	<build>
