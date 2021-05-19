@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class Recipe implements Serializable{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "recipe_id")
 	private Long recipeId;
 
@@ -38,11 +38,11 @@ public class Recipe implements Serializable{
 	@Column(name = "recipe_for_person")
 	private Long noOfPerson;
 
-	/*
-	 * @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	 * 
-	 * @JoinColumn(name = "ingredients_id") private Ingredients ingredients;
-	 */
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) 
+	//@OneToOne
+	@JoinColumn(name = "ingredientsId") 
+	private Ingredients ingredients;
+	 
 	
 	
 
@@ -53,9 +53,19 @@ public class Recipe implements Serializable{
 		this.recipeCreationDt = recipeCreationDt;
 		this.recipeModificationDt = recipeModificationDt;
 		this.isActive = isActive;
-		//this.ingredients = ingredients;
 	}
 	
+	
+	public Recipe(String recipeCd, Date recipeCreationDt, Date recipeModificationDt, boolean isActive, Long noOfPerson,
+			Ingredients ingredients) {
+		super();
+		this.recipeCd = recipeCd;
+		this.recipeCreationDt = recipeCreationDt;
+		this.recipeModificationDt = recipeModificationDt;
+		this.isActive = isActive;
+		this.noOfPerson = noOfPerson;
+		this.ingredients = ingredients;
+	}
 
 	public Recipe(String recipeCd, Date recipeCreationDt, Date recipeModificationDt, boolean isActive,
 			Long noOfPerson) {
@@ -114,16 +124,14 @@ public class Recipe implements Serializable{
 	public void setNoOfPerson(Long noOfPerson) {
 		this.noOfPerson = noOfPerson;
 	}
-	
-	
 
-	/*
-	 * public Ingredients getIngredients() { return ingredients; }
-	 * 
-	 * public void setIngredients(Ingredients ingredients) { this.ingredients =
-	 * ingredients; }
-	 */
-	
+	public Ingredients getIngredients() {
+		return ingredients;
+	}
+
+	public void setIngredients(Ingredients ingredients) {
+		this.ingredients = ingredients;
+	}
 	
 
 }

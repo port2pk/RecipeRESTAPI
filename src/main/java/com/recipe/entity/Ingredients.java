@@ -23,30 +23,34 @@ public class Ingredients implements Serializable {
 	@Column(name = "ingredients_id")
 	private Long ingredientsId;
 	
-	//@OneToOne(mappedBy="ingredients")
-	//@JoinColumn(name = "ingredients_id")
-	private Long recipeId;
-
-	@Column(name = "recipe_cd")
-	private String recipeCd;
-
+	
 	//@ElementCollection
 	@Column(name = "items_used")
 	private String items ;
+	
+	@OneToOne
+	@JoinColumn(name = "ingredientsId")
+	private Recipe recipeId;
 
 	public Ingredients() {}
 
-	public Ingredients(Long recipeId, String recipeCd, String items) {
+	public Ingredients(Recipe recipeId, String items) {
 		super();
 		this.recipeId = recipeId;
-		this.recipeCd = recipeCd;
+		//this.recipeCd = recipeCd;
 		this.items = items;
 	}
 	
-	public Ingredients(String recipeCd, String items) {
+	public Ingredients(String items) {
 		super();
-		this.recipeCd = recipeCd;
+		//this.recipeCd = recipeCd;
 		this.items = items;
+	}
+
+	public Ingredients(String items, Recipe recipeId) {
+		super();
+		this.items = items;
+		this.recipeId = recipeId;
 	}
 
 	public Long getIngredientsId() {
@@ -57,20 +61,12 @@ public class Ingredients implements Serializable {
 		this.ingredientsId = ingredientsId;
 	}
 
-	public Long getRecipeId() {
+	public Recipe getRecipeId() {
 		return recipeId;
 	}
 
-	public void setRecipeId(Long recipeId) {
+	public void setRecipeId(Recipe recipeId) {
 		this.recipeId = recipeId;
-	}
-
-	public String getRecipeCd() {
-		return recipeCd;
-	}
-
-	public void setRecipeCd(String recipeCd) {
-		this.recipeCd = recipeCd;
 	}
 
 	public String getItems() {

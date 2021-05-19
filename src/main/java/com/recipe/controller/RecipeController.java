@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.recipe.entity.Recipe;
+import com.recipe.entity.RecipeVO;
 import com.recipe.exception.NoEntityFoundException;
 import com.recipe.jwt.util.JWTUtil;
 import com.recipe.jwt.util.models.AuthenticationRequest;
 import com.recipe.jwt.util.models.AuthenticationResponse;
 import com.recipe.security.MyUserDetailsService;
 import com.recipe.service.RecipeService;
+import com.recipe.util.ConversionUtil;
 
 
 
@@ -55,18 +57,27 @@ public class RecipeController {
 	
 	//Get All Recipe
 	@GetMapping("/users/recipes")
-	public List<Recipe> getAllRecipe(){
+	public List<RecipeVO> getAllRecipe(){
 		log.info("getAllRecipe");
-		return recipeService.findAll();
+		List<Recipe> list = recipeService.findAll();
+		if(null != list && list.size()>0) {
+			return ConversionUtil.conversionRecipeToRecipeVO(list);
+		}
 		
+		return null;
 	}
 	
 	// Get Recipe By id
 	@GetMapping("/users/recipe/{id}")
-	public Recipe getRecipeById(
+	public RecipeVO getRecipeById(
 			@PathVariable Long id) {
 		log.info("getRecipeById");
-		return recipeService.findById(id);
+		Recipe recipy= recipeService.findById(id);
+		if(null != recipy) {
+			return ConversionUtil.conversionRecipeToRecipeVO(recipy);
+		}
+		return null;
+		
 	}
 	
 	
@@ -100,12 +111,13 @@ public class RecipeController {
 	
 	//update existing recipe
 	@PutMapping("users/recipe/{id}")
-	public ResponseEntity<Recipe> updateRecipe(
+	public ResponseEntity<RecipeVO> updateRecipe(
 			@PathVariable String id,
 			@RequestBody Recipe booking){
 		log.info("updateRecipe");
 		Recipe updatedRecipe = recipeService.saveRecipe(booking);
-		return new ResponseEntity<Recipe>(updatedRecipe, HttpStatus.OK);
+		RecipeVO vo=ConversionUtil.conversionRecipeToRecipeVO(updatedRecipe);
+		return new ResponseEntity<RecipeVO>(vo, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
