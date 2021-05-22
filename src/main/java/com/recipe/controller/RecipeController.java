@@ -12,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.recipe.entity.RecIngDto;
 import com.recipe.entity.Recipe;
 import com.recipe.entity.RecipeVO;
 import com.recipe.exception.NoEntityFoundException;
@@ -60,6 +60,28 @@ public class RecipeController {
 	public List<RecipeVO> getAllRecipe(){
 		log.info("getAllRecipe");
 		List<Recipe> list = recipeService.findAll();
+		if(null != list && list.size()>0) {
+			return ConversionUtil.conversionRecipeToRecipeVO(list);
+		}
+		
+		return null;
+	}
+	//sample Demo with Custom Repository methods
+	@GetMapping("/user/recipe")
+	public List<RecIngDto> testCustomMethodCall(){
+		log.info("testCustomMethodCall");
+		List<RecIngDto> list = recipeService.testCustome();
+		if(null != list && list.size()>0) {
+			return list;
+		}
+		
+		return null;
+	}
+	
+	@GetMapping("/users/recipe")
+	public List<RecipeVO> testCustomRecipe(){
+		log.info("testCustomMethodCall");
+		List<Recipe> list=recipeService.testCustomRecipe();
 		if(null != list && list.size()>0) {
 			return ConversionUtil.conversionRecipeToRecipeVO(list);
 		}

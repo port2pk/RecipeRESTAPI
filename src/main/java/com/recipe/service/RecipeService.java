@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.recipe.entity.RecIngDto;
 import com.recipe.entity.Recipe;
 import com.recipe.exception.NoEntityFoundException;
 import com.recipe.repos.RecipeRepository;
@@ -27,6 +28,14 @@ public class RecipeService {
 	 */
 	public List<Recipe> findAll(){
 		return recipeRepos.findAll();
+	}
+	
+	public List<RecIngDto> testCustome(){
+		return recipeRepos.checkCustomWithReturn();
+	}
+	
+	public List<Recipe> testCustomRecipe(){
+		return recipeRepos.checkCustom();
 	}
 	/**
 	 * sample logic
