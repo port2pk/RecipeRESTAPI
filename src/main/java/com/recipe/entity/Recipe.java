@@ -13,9 +13,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "RECIPE")
+@JsonIgnoreProperties(value= {"isActive","noOfPerson"})
 public class Recipe implements Serializable{
 
 	@Id
@@ -35,6 +40,10 @@ public class Recipe implements Serializable{
 	@Column(name = "recipe_is_active")
 	private boolean isActive;
 	
+	@Version
+	private Long version;
+	
+	@JsonIgnore
 	@Column(name = "recipe_for_person")
 	private Long noOfPerson;
 
@@ -132,6 +141,16 @@ public class Recipe implements Serializable{
 	public void setIngredients(Ingredients ingredients) {
 		this.ingredients = ingredients;
 	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+	
+	
 	
 
 }

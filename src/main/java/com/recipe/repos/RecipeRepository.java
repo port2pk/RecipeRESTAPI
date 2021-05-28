@@ -3,6 +3,9 @@ package com.recipe.repos;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.LockModeType;
+
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -12,9 +15,11 @@ import com.recipe.entity.RecIngDto;
 import com.recipe.entity.Recipe;
 
 @Repository
+//@RepositoryRestResource(collectionResourceRel = "people", path = "people")
 public interface RecipeRepository extends CrudRepository<Recipe,Long> {
 	
 	public List<Recipe> findAll();
+	
 	
 	public Optional<Recipe> findById(Long id);
 	
@@ -24,4 +29,8 @@ public interface RecipeRepository extends CrudRepository<Recipe,Long> {
 	
 	@Query("select p from Recipe p inner join Ingredients i on p.ingredients.ingredientsId=i.ingredientsId")
 	public List<Recipe> checkCustom();
+	
+	
 }
+
+

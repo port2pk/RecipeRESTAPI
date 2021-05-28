@@ -2,6 +2,8 @@ package com.recipe.exception;
 
 import java.util.Date;
 
+import javax.persistence.OptimisticLockException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,12 @@ public class ExceptionHelper extends ResponseEntityExceptionHandler {
 	
 	private static final Logger log = LoggerFactory.getLogger(ExceptionHelper.class);
 	
-	
+	@ExceptionHandler(value = { OptimisticLockException.class })
+	public ResponseEntity<Object> handleOptimisticLockException(Exception ex, WebRequest req) {
+		log.error("Exception: ", ex.getMessage());
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),ex.getMessage(),req.getDescription(true));
+		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.CONFLICT);
+	}
 	@ExceptionHandler(value = { ExpiredJwtException.class })
 	public ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException ex, WebRequest req) {
 		log.error("ExpiredJwtException: ", ex.getMessage());

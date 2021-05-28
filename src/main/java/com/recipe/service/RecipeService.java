@@ -1,13 +1,23 @@
 package com.recipe.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import javax.persistence.OptimisticLockException;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.recipe.entity.RecIngDto;
 import com.recipe.entity.Recipe;
+import com.recipe.entity.RecipeVO;
 import com.recipe.exception.NoEntityFoundException;
 import com.recipe.repos.RecipeRepository;
 
@@ -18,6 +28,9 @@ import com.recipe.repos.RecipeRepository;
  */
 @Service
 public class RecipeService {
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	@Autowired
 	RecipeRepository recipeRepos;
@@ -42,11 +55,13 @@ public class RecipeService {
 	 * @param id
 	 * @return
 	 */
+	@Transactional
 	public Recipe findById(Long id) {
 		Recipe recipee =null;
 		Optional<Recipe> recipe =recipeRepos.findById(id);
 		if(recipe.isPresent()) {
 			recipee = recipe.get();
+			entityManager.lock(recipee, LockModeType.OPTIMISTIC);
 		}else {
 			throw new NoEntityFoundException("No record found for id :"+id);
 		}
@@ -55,7 +70,8 @@ public class RecipeService {
 	/**
 	 * This is just a sample logic for save.
 	 */
-	public Recipe saveRecipe(Recipe recipe) {
+	
+	public Recipe saveRecipe(Recipe recipe) throws Exception {
 		Recipe persistedRecipe = null;
 		if(recipe.getRecipeId() == null) {
 			persistedRecipe = recipeRepos.save(recipe);
@@ -83,6 +99,20 @@ public class RecipeService {
 			isDeleted = true;
 		}
 		return isDeleted;
+	}
+	@Transactional
+	public Recipe testTxn(Long id) throws OptimisticLockException {
+		
+		//System.out.println("TestTxn started for id : "+id);
+		Recipe recipe = entityManager.find(Recipe.class, id);
+		Long personTotal = recipe.getNoOfPerson()+1;
+		recipe.setNoOfPerson(personTotal);
+		recipe.setRecipeModificationDt(new Date());
+		Recipe savedRecipe = recipeRepos.save(recipe);
+		entityManager.flush();
+		//System.out.println("TestTxn ended here for id :"+savedRecipe.getRecipeId());
+		return savedRecipe;	
+		
 	}
 	
 }
